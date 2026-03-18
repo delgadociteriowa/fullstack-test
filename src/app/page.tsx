@@ -42,6 +42,8 @@ const Home = () =>  {
   const [selectedCampaign, setSelectedCampaign] = useState('');
   const [alphOrder, setAlphOrder] = useState(true); 
   const [profitOrder, setProfitOrder] = useState(true); 
+  const [startDateOrder, setStartDateOrder] = useState(true); 
+  const [endDateOrder, setEndDateOrder] = useState(true); 
   const [userCampaign, setUserCampaign] = useState({
     name: "",
     startDate: "",
@@ -120,6 +122,38 @@ const Home = () =>  {
     setProfitOrder(!profitOrder);
   };
   
+  const handleSortStartDate = () => {
+    const sorted = [...campaigns].sort((a, b) => {
+      const dateA = new Date(a.startDate).getTime();
+      const dateB = new Date(b.startDate).getTime();
+
+      if (startDateOrder) {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    });
+
+    setCampaigns(sorted);
+    setStartDateOrder(!startDateOrder);
+  };
+  
+  const handleSortEndDate = () => {
+    const sorted = [...campaigns].sort((a, b) => {
+      const dateA = new Date(a.endDate).getTime();
+      const dateB = new Date(b.endDate).getTime();
+
+      if (endDateOrder) {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    });
+
+    setCampaigns(sorted);
+    setEndDateOrder(!endDateOrder);
+  };
+  
   return (
     <div className="p-6">
       <h1 className="text-2xl mb-4">Campaigns Dashboard</h1>
@@ -190,13 +224,13 @@ const Home = () =>  {
               <th className="px-4 py-3">
                 <div className="flex items-center justify-between">
                   <span>Start Date</span>
-                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                  <span onClick={handleSortStartDate} className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
                 </div>
               </th>
               <th className="px-4 py-3">
                 <div className="flex items-center justify-between">
                   <span>End Date</span>
-                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                  <span onClick={handleSortEndDate} className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
                 </div>
               </th>
               <th className="px-4 py-3">Cost</th>
