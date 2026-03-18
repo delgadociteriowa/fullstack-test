@@ -41,6 +41,7 @@ const Home = () =>  {
   const [campaigns, setCampaigns] = useState<Campaign[]>(baseCampaigns);
   const [selectedCampaign, setSelectedCampaign] = useState('');
   const [alphOrder, setAlphOrder] = useState(true); 
+  const [profitOrder, setProfitOrder] = useState(true); 
   const [userCampaign, setUserCampaign] = useState({
     name: "",
     startDate: "",
@@ -104,9 +105,24 @@ const Home = () =>  {
     setAlphOrder(!alphOrder);
   };
   
+  const handleSortProfit = () => {
+    const sorted = [...campaigns].sort((a, b) => {
+      const profitA = a.revenue - a.cost;
+      const profitB = b.revenue - b.cost;
+      
+      if (profitOrder) {
+        return profitA - profitB;
+      } else {
+        return profitB - profitA;
+      }
+    });
+    setCampaigns(sorted);
+    setProfitOrder(!profitOrder);
+  };
+  
   return (
     <div className="p-6">
-      <h1 className="text-2xl mb-4">Campaigns</h1>
+      <h1 className="text-2xl mb-4">Campaigns Dashboard</h1>
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6"
@@ -188,7 +204,7 @@ const Home = () =>  {
               <th className="px-4 py-3">
                 <div className="flex items-center justify-between">
                   <span>Profit</span>
-                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                  <span onClick={handleSortProfit} className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
                 </div>
               </th>
             </tr>
