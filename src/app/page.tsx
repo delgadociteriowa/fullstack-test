@@ -39,7 +39,8 @@ const Home = () =>  {
   ];
   
   const [campaigns, setCampaigns] = useState<Campaign[]>(baseCampaigns);
-  const [selectedCampaign, setSelectedCampaign] = useState(''); 
+  const [selectedCampaign, setSelectedCampaign] = useState('');
+  const [alphOrder, setAlphOrder] = useState(true); 
   const [userCampaign, setUserCampaign] = useState({
     name: "",
     startDate: "",
@@ -89,6 +90,18 @@ const Home = () =>  {
       setCampaigns(campaigns.filter((c) => c.id !== selectedCampaign));
       setSelectedCampaign('');
     }
+  };
+
+  const handleSortAlphabetical = () => {
+    const sorted = [...campaigns].sort((a, b) => {
+      if (alphOrder) {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+    setCampaigns(sorted);
+    setAlphOrder(!alphOrder);
   };
   
   return (
@@ -152,12 +165,32 @@ const Home = () =>  {
         <table className="min-w-full border border-gray-200">
           <thead className="bg-gray-100">
             <tr className="text-left text-sm font-medium text-gray-600">
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Start Date</th>
-              <th className="px-4 py-3">End Date</th>
+              <th className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span>Name</span>
+                  <span onClick={handleSortAlphabetical} className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                </div>
+              </th>
+              <th className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span>Start Date</span>
+                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                </div>
+              </th>
+              <th className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span>End Date</span>
+                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                </div>
+              </th>
               <th className="px-4 py-3">Cost</th>
               <th className="px-4 py-3">Revenue</th>
-              <th className="px-4 py-3">Profit</th>
+              <th className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span>Profit</span>
+                  <span className="text-xs text-black-400 font-bold cursor-pointer">↕</span>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
